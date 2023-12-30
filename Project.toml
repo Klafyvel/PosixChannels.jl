@@ -1,13 +1,18 @@
 name = "PosixChannels"
 uuid = "0f0bcd13-3e12-4a59-be10-81f16103b667"
 authors = ["Hugo Levy-Falk <hugo@klafyvel.me> and contributors"]
-version = "0.1"
+version = "0.1.0"
+
+[deps]
 
 [compat]
 julia = "^1.8"
+Aqua = "^0.8"
+Test = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
 
 [targets]
-test = ["Test"]
+test = ["Aqua", "Test"]

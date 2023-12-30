@@ -1,7 +1,10 @@
 using PosixChannels
 using Test
+using Aqua
 
 @testset "PosixChannels.jl" begin
+    Aqua.test_all(PosixChannels)
+
     writer = PosixChannel{Int}("test", mode=:w)
     reader = PosixChannel{Int}("test", mode=:r)
 
