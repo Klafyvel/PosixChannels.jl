@@ -16,3 +16,6 @@ makedocs(
 #=deploydocs(
     repo = "<repository url>"
 )=#
+deploydocs(
+    repo = "github.com/klafyvel/PosixChannels.jl.git",
+)
