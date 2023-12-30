@@ -7,22 +7,6 @@ For more informations on POSIX message queues, see [`man 7 mq_overview`](https:/
 """
 module PosixChannels
 
-PROC_MSG_DEFAULT = "/proc/sys/fs/mqueue/msg_default"
-systemmsgdefault() = parse(Int, read(PROC_MSG_DEFAULT, String))
-systemmsgdefault!(val) = write(PROC_MSG_DEFAULT, string(val))
-PROC_MSG_MAX = "/proc/sys/fs/mqueue/msg_max"
-systemmsgmax() = parse(Int, read(PROC_MSG_MAX, String))
-systemmsgmax!(val) = write(PROC_MSG_MAX, string(val))
-PROC_MSG_SIZE_DEFAULT = "/proc/sys/fs/mqueue/msgsize_default"
-systemmsgsizedefault() = parse(Int, read(PROC_MSG_SIZE_DEFAULT, String))
-systemmsgsizedefault!(val) = write(PROC_MSG_SIZE_DEFAULT, string(val))
-PROC_MSG_SIZE_MAX = "/proc/sys/fs/mqueue/msgsize_max"
-systemmsgsizemax() = parse(Int, read(PROC_MSG_SIZE_MAX, String))
-systemmsgsizemax!(val) = write(PROC_MSG_SIZE_MAX, string(val))
-PROC_QUEUES_MAX = "/proc/sys/fs/mqueue/queues_max"
-systemqueuesmax() = parse(Int, read(PROC_QUEUES_MAX, String))
-systemqueuesmax!(val) = write(PROC_QUEUES_MAX, string(val))
-
 # found in /usr/include/bits/fcntl-linux.h
 const O_RDONLY::UInt32 = 0o00
 const O_WRONLY::UInt32 = 0o01
@@ -102,7 +86,7 @@ mq_attr() = mq_attr(0,0,0,0)
 """
     open_posix_mqueue(name, flags[, perm, attr])
 
-Call the C function `mq_open` with the given name and flags. Checks for errors using [`Base.systemerror`](@ref). `name` is corrected using [`correct_name`](@ref).
+Call the C function `mq_open` with the given name and flags. Checks for errors using [`Base.systemerror`](https://docs.julialang.org/en/v1/base/c/#Base.systemerror). `name` is corrected using [`correct_name`](@ref).
 
 
 When `O_CREAT` flag is on, `perm` and `attr` are required.
@@ -183,7 +167,7 @@ end
 """
     close_posix_mqueue(key)
 
-Call the C function `mq_close` with the given key. Checks for errors using [`Base.systemerror`](@ref).
+Call the C function `mq_close` with the given key. Checks for errors using [`Base.systemerror`](https://docs.julialang.org/en/v1/base/c/#Base.systemerror).
 
 See [`man 3 mq_close`](https://man7.org/linux/man-pages/man3/mq_close.3.html) for details.
 
@@ -198,7 +182,7 @@ end
 """
     unlink_posix_mqueue(name)
 
-Call the C function `mq_close` with the given name. Checks for errors using [`Base.systemerror`](@ref).
+Call the C function `mq_close` with the given name. Checks for errors using [`Base.systemerror`](https://docs.julialang.org/en/v1/base/c/#Base.systemerror).
 
 See [`man 3 mq_unlink`](https://man7.org/linux/man-pages/man3/mq_unlink.3.html) for details.
 
@@ -213,7 +197,7 @@ end
 """
     send_posix_mqueue(key, val, prio=0)
 
-Call the C function `mq_send` with the given key, value, and priority. Checks for errors using [`Base.systemerror`](@ref).
+    Call the C function `mq_send` with the given key, value, and priority. Checks for errors using [`Base.systemerror`](https://docs.julialang.org/en/v1/base/c/#Base.systemerror).
 
 See [`man 3 mq_send`](https://man7.org/linux/man-pages/man3/mq_send.3.html) for details.
 
@@ -229,7 +213,7 @@ end
 """
     receive_posix_mqueue(key, type[, prio])
 
-Call the C function `mq_receive` with the given key, and priority. Checks for errors using [`Base.systemerror`](@ref). An element of type `type` is retreived. If the priority is given, only messages with priority `prio` are fetched. Else, the oldest message is fetched.
+Call the C function `mq_receive` with the given key, and priority. Checks for errors using [`Base.systemerror`](https://docs.julialang.org/en/v1/base/c/#Base.systemerror). An element of type `type` is retreived. If the priority is given, only messages with priority `prio` are fetched. Else, the oldest message is fetched.
 
 See [`man 3 mq_receive`](https://man7.org/linux/man-pages/man3/mq_receive.3.html) for details.
 
@@ -254,7 +238,7 @@ end
 """
     getattr_posix_mqueue(key)
 
-Call the C function `mq_getattr` with the given key. Checks for errors using [`Base.systemerror`](@ref).
+Call the C function `mq_getattr` with the given key. Checks for errors using [`Base.systemerror`](https://docs.julialang.org/en/v1/base/c/#Base.systemerror).
 
 See [`man 3 mq_getattr`](https://man7.org/linux/man-pages/man3/mq_getattr.3.html) for details.
 
@@ -273,7 +257,7 @@ end
 ################################################################################
 
 """
-An impementation of [`AbstractChannel`](@ref) that uses POSIX message queues.
+An impementation of `AbstractChannel` that uses POSIX message queues.
 """
 struct PosixChannel{T} <: AbstractChannel{T}
     key::Int32
@@ -285,7 +269,7 @@ end
 
 Create a `PosixChannel` that works with messages of type `T`.
 
-*Notes*: `T` must be a plain data type ([`isbitstype`](@ref) must return `true`), and the message queue must allow for messages of at least `sizeof(T)`.
+*Notes*: `T` must be a plain data type (`isbitstype` must return `true`), and the message queue must allow for messages of at least `sizeof(T)`.
 
 # Extended help
 
@@ -326,7 +310,7 @@ for _ in 1:10
         wait(chan)
     end
     msg = take!(chan)
-    println("Received $msg")
+    println("Received \$msg")
 end
 
 println("Done!")
@@ -339,14 +323,14 @@ unlink(chan)
 You can then launch each script, and press return in the sender's window.
 
 ```bash
-$ julia --project sender.jl
+\$ julia --project sender.jl
 Press [Enter] when you are ready to send data.
 Done!
 Closing the channel.
 ```
 
 ```bash
-$ julia --project receiver.jl
+\$ julia --project receiver.jl
 Listening for 10 incoming Int, you may start sending
 Received 1
 Received 2
@@ -379,12 +363,13 @@ function PosixChannel{T}(name::String; kwargs...) where T
     PosixChannel{T}(key, correct_name(name), Base.AsyncCondition())
 end
 
+""
 Base.close(c::PosixChannel) = close_posix_mqueue(c.key)
 
 """
     unlink(chan)
 
-UNIX messages queues are persistent. This allows destroying a queue.
+POSIX messages queues are persistent. This allows destroying a queue.
 """
 unlink(c::PosixChannel) = unlink_posix_mqueue(c.name)
 
@@ -400,6 +385,7 @@ function isnonblocking(c::PosixChannel)
     (attr.mq_flags & O_NONBLOCK) > 0
 end
 
+""
 function Base.length(c::PosixChannel)
     attr = getattr_posix_mqueue(c.key)
     attr.mq_curmsgs
@@ -431,7 +417,7 @@ end
 """
     notify_channel(handle)
 
-Callback for the C function `mq_notify`. It only `@ccall uv_async_send` with the handle of the [`AsyncCondition`](@ref) from the channel.
+Callback for the C function `mq_notify`. It only `@ccall uv_async_send` with the handle of the [`AsyncCondition`](https://docs.julialang.org/en/v1/base/base/#Base.AsyncCondition) from the channel.
 
 See [the manual](https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/#Thread-safety) for an explanation.
 
@@ -447,7 +433,7 @@ const SIGEV_THREAD::UInt32 = 2
     register_notifier_cfunction(chan)
 
 
-Call the C function `mq_notify` for the message queue. Checks for errors using [`Base.systemerror`](@ref). 
+Call the C function `mq_notify` for the message queue. Checks for errors using [`Base.systemerror`](https://docs.julialang.org/en/v1/base/c/#Base.systemerror). 
 
 `mq_notify` is called with the `SIGEV_THREAD` flag and configured to call [`notify_channel`](@ref) with the channel's condition handle as a parameter. This is done so the OS will start a thread that will unlock the condition when a new message is posted to the empty queue. This function is used by `wait` before it starts waiting for the channel's condition.
 
@@ -501,16 +487,127 @@ See also [`receive_posix_mqueue`](@ref).
 """
 Base.take!(c::PosixChannel{T}, prio) where T = receive_posix_mqueue(c.key, T, prio)
 
+""
 Base.isready(c::PosixChannel) = length(c) > 0
 
+"""
+You cannot `fetch` from a PosixChannel.
+"""
 Base.fetch(::PosixChannel) = error("Fetching is unsupported for PosixChannel.")
 
+""
 function Base.wait(chan::PosixChannel)
     if !isready(chan)
         register_notifier_cfunction(chan)
         wait(chan.cond)
     end
 end
+
+################################################################################
+#                               /proc utilities                                #
+################################################################################
+
+PROC_MSG_DEFAULT = "/proc/sys/fs/mqueue/msg_default"
+PROC_MSG_MAX = "/proc/sys/fs/mqueue/msg_max"
+PROC_MSG_SIZE_DEFAULT = "/proc/sys/fs/mqueue/msgsize_default"
+PROC_MSG_SIZE_MAX = "/proc/sys/fs/mqueue/msgsize_max"
+PROC_QUEUES_MAX = "/proc/sys/fs/mqueue/queues_max"
+
+"""
+    systemmsgdefault()
+
+Return the system's default number of messages in a message queue.
+
+See also [`systemmsgdefault!`](@ref).
+"""
+systemmsgdefault() = parse(Int, read(PROC_MSG_DEFAULT, String))
+"""
+    systemmsgdefault!(val)
+
+Set the system's default number of messages in a message queue.
+
+!!! warning
+    Root privileges are likely needed.
+
+See also [`systemmsgdefault`](@ref).
+"""
+systemmsgdefault!(val) = write(PROC_MSG_DEFAULT, string(val))
+"""
+    systemmsgmax()
+
+Return the system's max number of messages in a message queue.
+
+See also [`systemmsgmax!`](@ref).
+"""
+systemmsgmax() = parse(Int, read(PROC_MSG_MAX, String))
+"""
+    systemmsgmax!(val)
+
+Set the system's max number of messages in a message queue.
+
+!!! warning
+    Root privileges are likely needed.
+
+See also [`systemmsgmax`](@ref).
+"""
+systemmsgmax!(val) = write(PROC_MSG_MAX, string(val))
+"""
+    systemmsgsizedefault()
+
+Return the system's default size of messages in a message queue.
+
+See also [`systemmsgdefault!`](@ref).
+"""
+systemmsgsizedefault() = parse(Int, read(PROC_MSG_SIZE_DEFAULT, String))
+"""
+    systemmsgsizedefault!(val)
+
+Set the system's default size of messages in a message queue.
+
+!!! warning
+    Root privileges are likely needed.
+
+See also [`systemmsgsizedefault`](@ref).
+"""
+systemmsgsizedefault!(val) = write(PROC_MSG_SIZE_DEFAULT, string(val))
+"""
+    systemmsgsizemax()
+
+Return the system's max size of messages in a message queue.
+
+See also [`systemmsgsizemax!`](@ref).
+"""
+systemmsgsizemax() = parse(Int, read(PROC_MSG_SIZE_MAX, String))
+"""
+    systemmsgsizemax!(val)
+
+Set the system's max size of messages in a message queue.
+
+!!! warning
+    Root privileges are likely needed.
+
+See also [`systemmsgsizemax`](@ref).
+"""
+systemmsgsizemax!(val) = write(PROC_MSG_SIZE_MAX, string(val))
+"""
+    systemqueuesmax()
+
+Return the system's max number of message queue.
+
+See also [`systemqueuesmax!`](@ref).
+"""
+systemqueuesmax() = parse(Int, read(PROC_QUEUES_MAX, String))
+"""
+    systemqueuesmax!(val)
+
+Set the system's max number of message queue.
+
+!!! warning
+    Root privileges are likely needed.
+
+See also [`systemqueuesmax`](@ref).
+"""
+systemqueuesmax!(val) = write(PROC_QUEUES_MAX, string(val))
 
 
 export PosixChannel, unlink, isnonblocking
