@@ -1,5 +1,21 @@
 module PosixChannels
-#
+
+PROC_MSG_DEFAULT = "/proc/sys/fs/mqueue/msg_default"
+systemmsgdefault() = parse(Int, read(PROC_MSG_DEFAULT, String))
+systemmsgdefault!(val) = write(PROC_MSG_DEFAULT, string(val))
+PROC_MSG_MAX = "/proc/sys/fs/mqueue/msg_max"
+systemmsgmax() = parse(Int, read(PROC_MSG_MAX, String))
+systemmsgmax!(val) = write(PROC_MSG_MAX, string(val))
+PROC_MSG_SIZE_DEFAULT = "/proc/sys/fs/mqueue/msgsize_default"
+systemmsgsizedefault() = parse(Int, read(PROC_MSG_SIZE_DEFAULT, String))
+systemmsgsizedefault!(val) = write(PROC_MSG_SIZE_DEFAULT, string(val))
+PROC_MSG_SIZE_MAX = "/proc/sys/fs/mqueue/msgsize_max"
+systemmsgsizemax() = parse(Int, read(PROC_MSG_SIZE_MAX, String))
+systemmsgsizemax!(val) = write(PROC_MSG_SIZE_MAX, string(val))
+PROC_QUEUES_MAX = "/proc/sys/fs/mqueue/queues_max"
+systemqueuesmax() = parse(Int, read(PROC_QUEUES_MAX, String))
+systemqueuesmax!(val) = write(PROC_QUEUES_MAX, string(val))
+
 # found in /usr/include/bits/fcntl-linux.h
 const O_RDONLY::UInt32 = 0o00
 const O_WRONLY::UInt32 = 0o01
