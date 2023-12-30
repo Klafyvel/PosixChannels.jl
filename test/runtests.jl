@@ -18,7 +18,7 @@ using Test
     v = take!(reader)
     @test v == 1
     @test length(reader) == 0
-    @test !isvailable(reader)
+    @test !isavailable(reader)
 
     close(reader)
     close(writer)
