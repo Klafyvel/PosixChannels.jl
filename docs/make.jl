@@ -17,5 +17,5 @@ makedocs(
     repo = "<repository url>"
 )=#
 deploydocs(
-    repo = "github.com/klafyvel/PosixChannels.jl.git",
+    repo = "github.com/Klafyvel/PosixChannels.jl.git",
 )
